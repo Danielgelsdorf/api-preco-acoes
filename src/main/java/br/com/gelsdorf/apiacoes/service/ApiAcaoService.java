@@ -8,4 +8,5 @@ import java.io.IOException;
 public interface ApiAcaoService {
     public Acao buscarAcao(String cod) throws IOException, InterruptedException, Exception;
     public Selic buscarTachaCDI() throws Exception;
+    public void  limparCache();
 }
