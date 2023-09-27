@@ -37,7 +37,7 @@ jobs:
         PORT: ${{ secrets.porta}}
         KEY: ${{ secrets.chave}}
         source: "."
-        target: "/root/repo/api
+        target: "/root/repo/api"
  
     - name: Executing remote command
       uses: appleboy/ssh-action@master
