@@ -48,8 +48,8 @@ jobs:
         KEY: ${{ secrets.chave}}
         script: |
             cd ./repo/api
-            sudo docker kill apir
-            sudo docker rmi api
-            sudo docker build . -t api
-            sudo docker run --name apir -d --rm -p 80:80 api
-            sudo docker logs apir
+            docker kill apir
+            docker rmi api
+            docker build . -t api
+            docker run --name apir -d --rm -p 80:80 api
+            docker logs apir
