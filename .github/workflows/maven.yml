@@ -37,7 +37,7 @@ jobs:
         PORT: ${{ secrets.porta}}
         KEY: ${{ secrets.chave}}
         source: "Dockerfile, target/*.jar"
-        target: /root/repo/api
+        target: /ubuntu/repo/api
  
     - name: Executing remote command
       uses: appleboy/ssh-action@master
