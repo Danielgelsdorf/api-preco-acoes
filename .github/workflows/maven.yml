@@ -21,8 +21,7 @@ jobs:
             cd ./repo/api/api-preco-acoes
             sudo git pull origin
             sudo mvn clean package
-  Executing remote command:
-
+  executing remote command:
     runs-on: ubuntu-latest
 
     steps:
