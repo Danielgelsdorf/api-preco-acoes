@@ -38,7 +38,7 @@ jobs:
         KEY: ${{ secrets.chave}}
         script: |
             cd ./repo/api
-            git clone https://github.com/Danielgelsdorf/api-preco-acoes.git
+            sudo git clone https://github.com/Danielgelsdorf/api-preco-acoes.git
     - name: Executing remote command
       uses: appleboy/ssh-action@master
       with:
