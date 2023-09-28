@@ -2,7 +2,8 @@ package br.com.gelsdorf.apiacoes.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Acao {
@@ -14,6 +15,7 @@ public class Acao {
     private double regularMarketDayHigh;
     @JsonAlias("regularMarketDayLow")
     private double regularMarketDayLow;
+    private String horaUltimaAtualizacao;
 
     public Acao(String longName, double regularMarketPrice, double regularMarketDayHigh, double regularMarketDayLow) {
         this.longName=longName;
@@ -55,5 +57,13 @@ public class Acao {
 
     public void setRegularMarketDayLow(double regularMarketDayLow) {
         this.regularMarketDayLow = regularMarketDayLow;
+    }
+
+    public String getHoraUltimaAtualizacao() {
+        return horaUltimaAtualizacao;
+    }
+
+    public void setHoraUltimaAtualizacao(String horaUltimaAtualizacao) {
+        this.horaUltimaAtualizacao = horaUltimaAtualizacao;
     }
 }
