@@ -37,8 +37,8 @@ jobs:
         PORT: ${{ secrets.porta}}
         KEY: ${{ secrets.chave}}
         script: |
-            cd ./repo/api
-            sudo git clone https://github.com/Danielgelsdorf/api-preco-acoes.git
+            cd ./repo/api/api-preco-acoes
+            git pull origin
     - name: Executing remote command
       uses: appleboy/ssh-action@master
       with:
