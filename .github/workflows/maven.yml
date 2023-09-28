@@ -38,7 +38,7 @@ jobs:
         KEY: ${{ secrets.chave}}
         script: |
             cd ./repo/api/api-preco-acoes
-            git pull origin
+            sudo git pull origin
     - name: Executing remote command
       uses: appleboy/ssh-action@master
       with:
