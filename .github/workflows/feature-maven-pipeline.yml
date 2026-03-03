@@ -1,0 +1,37 @@
+name: Java CI com Maven
+
+# Define quando o pipeline será executado
+on:
+  push:
+    branches: [ "feature/*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixa o código do seu repositório para o servidor do GitHub
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # 2. Instala o Java (JDK 17 é o padrão atual do Spring Boot)
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # 3. Compila o projeto e roda os testes automatizados
+      # O comando 'package' executa os testes antes de gerar o JAR
+      - name: Build e Testes com Maven
+        run: mvn -B package --file pom.xml
+
+      # 4. (Opcional) Guarda o JAR gerado para provar que o build funcionou
+      - name: Upload do artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-acoes-jar
+          path: target/*.jar
