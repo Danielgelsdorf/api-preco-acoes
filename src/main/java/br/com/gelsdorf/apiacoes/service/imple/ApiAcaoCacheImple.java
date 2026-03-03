@@ -32,7 +32,7 @@ public class ApiAcaoCacheImple implements ApiAcaoCacheService {
         return acaoRetorno;
     }
 
-    public String formatarHora(LocalTime ultimaLimpesa) {
+public String formatarHora(LocalTime ultimaLimpesa) {
         DateTimeFormatter modeloFormatacao = DateTimeFormatter.ofPattern("HH:mm");
         return modeloFormatacao.format(ultimaLimpesa);
     }
