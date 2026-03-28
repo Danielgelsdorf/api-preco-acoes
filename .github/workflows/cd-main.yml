@@ -27,14 +27,14 @@ jobs:
       - name: Smoke Test (Simulação de Deploy)
         run: |
           # Sobe o container em background
-          docker run -d -p 8080:8080 --name app-producao api-preco-acoes:latest
+          docker run -d -p 80:80 --name app-producao api-preco-acoes:latest
           
           # Aguarda o Spring Boot iniciar (aumentei para 30s para garantir)
           echo "Aguardando inicialização da API..."
-          sleep 30
+          sleep 10
           
           # Se falhar, mostra os logs do Spring antes de fechar o job
-          curl --fail http://localhost:8080/ || (docker logs app-producao && exit 1)
+          curl --fail http://localhost:80/ || (docker logs app-producao && exit 1)
           
           echo "✅ Deploy validado com sucesso! Container respondendo."
 
