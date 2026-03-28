@@ -1,0 +1,44 @@
+name: CD - Deploy de Produção
+
+on:
+  push:
+    branches: [ "main" ] # Dispara apenas quando o código chega na Main (via Merge ou Push)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build do JAR (Maven)
+        run: mvn -B package -DskipTests # Pula testes aqui pois o CI já validou
+
+      - name: Build da Imagem Docker
+        run: docker build -t api-preco-acoes:latest .
+
+      - name: Smoke Test (Simulação de Deploy)
+        run: |
+          # Sobe o container em background
+          docker run -d -p 8080:8080 --name app-producao api-preco-acoes:latest
+          
+          # Aguarda o Spring Boot iniciar (20 segundos costumam ser suficientes)
+          echo "Aguardando inicialização da API..."
+          sleep 20
+          
+          # Tenta um comando CURL simples no seu endpoint (ou na raiz)
+          # Se retornar erro, o pipeline falha
+          curl --fail http://localhost:8080/ || exit 1
+          
+          echo "✅ Deploy validado com sucesso! Container respondendo."
+
+      - name: Cleanup
+        if: always()
+        run: docker stop app-producao && docker rm app-producao
