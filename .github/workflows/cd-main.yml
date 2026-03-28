@@ -29,16 +29,15 @@ jobs:
           # Sobe o container em background
           docker run -d -p 8080:8080 --name app-producao api-preco-acoes:latest
           
-          # Aguarda o Spring Boot iniciar (20 segundos costumam ser suficientes)
+          # Aguarda o Spring Boot iniciar (aumentei para 30s para garantir)
           echo "Aguardando inicialização da API..."
-          sleep 20
+          sleep 30
           
-          # Tenta um comando CURL simples no seu endpoint (ou na raiz)
-          # Se retornar erro, o pipeline falha
-          curl --fail http://localhost:8080/ || exit 1
+          # Se falhar, mostra os logs do Spring antes de fechar o job
+          curl --fail http://localhost:8080/ || (docker logs app-producao && exit 1)
           
           echo "✅ Deploy validado com sucesso! Container respondendo."
 
       - name: Cleanup
-        if: always()
-        run: docker stop app-producao && docker rm app-producao
+        if: always() # Garante que tenta limpar apenas se o container existir
+        run: docker stop app-producao || true && docker rm app-producao || true
