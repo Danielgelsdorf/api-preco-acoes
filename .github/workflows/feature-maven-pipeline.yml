@@ -1,6 +1,5 @@
 name: Java CI com Maven
 
-# Define quando o pipeline será executado
 on:
   push:
     branches: [ "feature/*" ]
@@ -10,13 +9,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      # 1. Baixa o código do seu repositório para o servidor do GitHub
       - name: Checkout do código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # 2. Instala o Java (JDK 17 é o padrão atual do Spring Boot)
       - name: Configurar JDK 17
         uses: actions/setup-java@v4
         with:
@@ -24,14 +22,33 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # 3. Compila o projeto e roda os testes automatizados
-      # O comando 'package' executa os testes antes de gerar o JAR
       - name: Build e Testes com Maven
         run: mvn -B package --file pom.xml
 
-      # 4. (Opcional) Guarda o JAR gerado para provar que o build funcionou
       - name: Upload do artefato
         uses: actions/upload-artifact@v4
         with:
           name: api-acoes-jar
           path: target/*.jar
+
+  open-pr:
+    needs: build
+    if: github.event_name == 'push' && contains(github.ref, 'refs/heads/feature/')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Abrir Pull Request via GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Tenta criar o PR. Se já existir, ele apenas ignora o erro e segue o jogo.
+          gh pr create \
+            --title "🚀 Auto-PR: Integração de ${{ github.ref_name }}" \
+            --body "PR aberto automaticamente após sucesso no Build de CI. (Fase 2 - DevOps)" \
+            --base main \
+            --head ${{ github.ref_name }} || echo "PR já existe ou não há mudanças para integrar."
