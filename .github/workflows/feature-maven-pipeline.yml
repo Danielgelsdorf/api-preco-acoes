@@ -39,7 +39,7 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      - name: Checkout do código (Full History)
+      - name: Checkout do código
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -48,11 +48,10 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref_name }}
+          branch: ${{ github.ref_name }} # Usa a SUA branch de push
           base: main
           title: "🚀 Auto-PR: Integração de ${{ github.ref_name }}"
-          body: |
-            ### 🤖 Automação de DevOps (Fase 2)
-            PR aberto automaticamente após o sucesso do pipeline de CI.
-          labels: |
-            automated-pr
+          body: "PR aberto automaticamente via CI."
+          # O SEGREDO ESTÁ AQUI:
+          commit-message: "docs: sincronizando metadados de workflow"
+          push-token: ${{ secrets.GITHUB_TOKEN }}
