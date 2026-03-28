@@ -34,7 +34,7 @@ jobs:
           sleep 10
           
           # Se falhar, mostra os logs do Spring antes de fechar o job
-          curl --fail http://localhost:80/ || (docker logs app-producao && exit 1)
+          curl --fail http://localhost:80/actuator/health || (docker logs app-producao && exit 1)
           
           echo "✅ Deploy validado com sucesso! Container respondendo."
 
