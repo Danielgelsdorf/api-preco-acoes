@@ -19,7 +19,7 @@ jobs:
           cache: maven
 
       - name: Build do JAR (Maven)
-        run: mvn -B package -DskipTests # Pula testes aqui pois o CI já validou
+        run: mvn -B clean package -DskipTests 
 
       - name: Build da Imagem Docker
         run: docker build -t api-preco-acoes:latest .
