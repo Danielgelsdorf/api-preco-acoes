@@ -41,17 +41,14 @@ jobs:
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref_name }} # Usa a SUA branch de push
-          base: main
-          title: "🚀 Auto-PR: Integração de ${{ github.ref_name }}"
-          body: "PR aberto automaticamente via CI."
-          # O SEGREDO ESTÁ AQUI:
-          commit-message: "docs: sincronizando metadados de workflow"
-          push-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Abrir Pull Request via GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Tenta criar o PR. Se já existir, ele apenas ignora o erro e segue o jogo.
+          gh pr create \
+            --title "🚀 Auto-PR: Integração de ${{ github.ref_name }}" \
+            --body "PR aberto automaticamente após sucesso no Build de CI. (Fase 2 - DevOps)" \
+            --base main \
+            --head ${{ github.ref_name }} || echo "PR já existe ou não há mudanças para integrar."
