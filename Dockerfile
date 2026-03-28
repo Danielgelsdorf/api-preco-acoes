@@ -1,5 +1,13 @@
-from openjdk:17
-COPY ./target/ /usr/src/myapp
-WORKDIR /usr/src/myapp
+FROM eclipse-temurin:17-jre-alpine
+
+# Cria um usuário sem privilégios de root (Boa prática de segurança/IAM)
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
+WORKDIR /app
+
+COPY target/*.jar app.jar
+
 EXPOSE 8080
-CMD java -jar api-acoes-0.0.1-SNAPSHOT.jar
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
